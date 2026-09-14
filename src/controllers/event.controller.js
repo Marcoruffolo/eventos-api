@@ -14,15 +14,15 @@ export const eventList = async(req, res) => {
 
 export const getEvent = async(req, res) => {
     const event = await getEventById(req.params.id)
-    res.status(200).json({ status: "success", payload: EventDTO(event) })
+    res.status(200).json({ status: "success", data: EventDTO(event) })
 }
 
 export const updateEvent = async(req, res) => {
     const event = await updateEventService(req.params.id, req.body, req.user)
-    res.status(200).json({ status: "success", payload: EventDTO(event) })
+    res.status(200).json({ status: "success", data: EventDTO(event) })
 }
 
 export const updateEventStatus = async(req, res) => {
     const event = await updateEventStatusService(req.params.id, req.body.status, req.user)
-    res.status(200).json({ status: "success", payload: EventDTO(event)})
+    res.status(200).json({ status: "success", data: EventDTO(event)})
 }

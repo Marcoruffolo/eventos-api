@@ -39,6 +39,9 @@ export const getEvents = async(query) => {
     if(query.status){
         filter.status = query.status
     }
+    else {
+        filter.status = "published"
+    }
     if(query.location){
         filter.location = query.location
     }
