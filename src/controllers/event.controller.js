@@ -3,7 +3,7 @@ import { EventDTO } from "../dto/event.dto.js";
 
 export const createEvent = async(req, res) => {
     const event = await createEventService(req.body, req.user.id)
-    res.status(201).json({ status: "success", payload : EventDTO(event)})
+    res.status(201).json({ status: "success", data : EventDTO(event)})
 }
 
 export const eventList = async(req, res) => {
