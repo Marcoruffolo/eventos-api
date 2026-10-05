@@ -11,4 +11,9 @@ const connectDB = async () => {
         process.exit(1)
     }
 }
+
+export const disconnectDB = async () => {
+    await mongoose.disconnect()
+}
+
 export default connectDB;

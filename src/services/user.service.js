@@ -23,22 +23,42 @@ export const registerUser = async ({ first_name, last_name, email, password}) =>
     return user;
 }
 
-export const loginUser = async(email,password) => {
-    const existingUser = await userRepository.getByEmail(email)
 
+export const loginUser = async(email,password) => {
+    const existingUser = await userRepository.getByEmail(email)  
     if(!existingUser){
         throw new AppError("Credenciales invalidas",401)
-    }
-
+    }  
     const checkPassword = await isValidPassword(password,existingUser.password)
-
+    
     if(!checkPassword){
         throw new AppError("Credenciales invalidas",401)
-    }
-
+    }   
     return existingUser;
 }
 
 export const getUserById = async (id) => {
     return userRepository.getById(id)
+}
+
+
+export const ensureAdmin = async ({ email, password }) => {
+    const passwordErrors = getPasswordErrors(password)
+    if(passwordErrors.length > 0){
+        throw new AppError(`La contraseña debe tener ${passwordErrors.join(", ")}`, 400)
+    }
+
+    const existingUser = await userRepository.getByEmail(email)
+
+    if(existingUser && existingUser.role === "admin"){
+        return existingUser
+    }
+    if(existingUser){
+        return userRepository.updateRole(existingUser.id, "admin")
+    }
+    const hashedPassword = await createHash(password)
+
+    const user = await userRepository.create({ first_name : "Admin", last_name : "Principal", email, password: hashedPassword, role: "admin"})
+
+    return user
 }

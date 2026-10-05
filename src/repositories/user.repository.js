@@ -14,4 +14,8 @@ export class UserRepository{
     async getById(id){
         return this.dao.getById(id)
     }
+
+    async updateRole(id, role){
+        return this.dao.updateRole(id, role)
+    }
 }

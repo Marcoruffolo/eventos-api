@@ -12,4 +12,8 @@ export class UserDAO{
     async getById(id){
         return UserModel.findById(id)
     }
+
+    async updateRole(id, role){
+        return UserModel.findByIdAndUpdate(id, { role }, {new: true})
+    }
 }
