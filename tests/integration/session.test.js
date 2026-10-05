@@ -18,11 +18,11 @@ afterAll(async() => {
 test("un usuario puede registrarse, loguearse y consultar su sesión actual", async () => {
     const agent = request.agent(app)
     const res1 = await agent.post("/api/sessions/register")
-    .send({ first_name : "Juan", last_name : "perez", email : "juanperez@gmail.com", password : "3535" })
+    .send({ first_name : "Juan", last_name : "perez", email : "juanperez@gmail.com", password : "Segura123" })
     expect(res1.status).toBe(201)
 
     const res2 = await agent.post("/api/sessions/login")
-    .send({ email : "juanperez@gmail.com", password : "3535"})
+    .send({ email : "juanperez@gmail.com", password : "Segura123"})
     expect(res2.status).toBe(200)
 
     const res3 = await agent.get("/api/sessions/current")
@@ -32,10 +32,17 @@ test("un usuario puede registrarse, loguearse y consultar su sesión actual", as
 
 test("login con credenciales invalidas", async () => {
     const resRegister = await request(app).post("/api/sessions/register")
-    .send({ first_name : "Juan", last_name : "perez", email : "juanperez@gmail.com", password : "3535" })
+    .send({ first_name : "Juan", last_name : "perez", email : "juanperez@gmail.com", password : "Segura123" })
     expect(resRegister.status).toBe(201)
-    
+
     const resLogin = await request(app).post("/api/sessions/login")
-    .send({ first_name : "Juan", last_name : "perez", email : "juanperez@gmail.com", password : "4444" })
+    .send({ first_name : "Juan", last_name : "perez", email : "juanperez@gmail.com", password : "Otra12345" })
     expect(resLogin.status).toBe(401)
+})
+
+test("registro con contraseña insegura devuelve 400", async () => {
+    const res = await request(app).post("/api/sessions/register")
+    .send({ first_name : "Juan", last_name : "perez", email : "juanperez@gmail.com", password : "3535" })
+    expect(res.status).toBe(400)
+    expect(res.body.message).toMatch("La contraseña debe tener")
 })
