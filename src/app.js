@@ -7,6 +7,7 @@ import { errorHandler } from "./middlewares/errorHandler.js";
 import sessionRouter from "./routes/session.router.js"
 import eventRouter from "./routes/event.router.js";
 import ticketRouter from "./routes/ticket.router.js";
+import organizerRequestRouter from "./routes/organizerRequest.router.js"
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.get("/",(req,res) =>{
 app.use("/api/sessions",sessionRouter)
 app.use("/api/events",eventRouter)
 app.use("/api/tickets",ticketRouter)
+app.use("/api/organizer-requests",organizerRequestRouter)
 
 app.use(errorHandler);
 

@@ -62,3 +62,7 @@ export const ensureAdmin = async ({ email, password }) => {
 
     return user
 }
+
+export const promoteToOrganizer = async (userId) =>{
+    return userRepository.updateRole(userId, "organizer")
+}
