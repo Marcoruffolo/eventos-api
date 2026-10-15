@@ -17,6 +17,10 @@ export class OrganizerRequestDAO{
         return OrganizerRequestModel.findOne({ user: userId, status: "pending" })
     }
 
+    async findLatestByUser(userId){
+        return OrganizerRequestModel.findOne({ user: userId }).sort({ createdAt: -1 })
+    }
+
     async findByStatus(status){
         return OrganizerRequestModel.find({ status }).populate("user", "first_name last_name email").sort({ createdAt: 1 })
     }

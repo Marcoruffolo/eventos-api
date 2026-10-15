@@ -27,6 +27,10 @@ export const createOrganizerRequest = async (user, { organizationName, descripti
     return organizationRequest
 }
 
+export const getMyLatestRequest = async(userId) => {
+    return organizerRequestRepository.findLatestByUser(userId)
+}
+
 export const getRequestsByStatus = async(status = "pending") => {
 
     const validStatus = ["pending","approved","rejected"]

@@ -1,9 +1,14 @@
-import { createOrganizerRequest, getRequestsByStatus, reviewRequest } from ".././services/organizerRequest.service.js"
+import { createOrganizerRequest, getMyLatestRequest, getRequestsByStatus, reviewRequest } from ".././services/organizerRequest.service.js"
 import { organizerRequestDTO } from "../dto/organizerRequest.dto.js";
 
 export const createRequest = async(req, res) => {
     const request = await createOrganizerRequest(req.user, req.body ?? {})
     res.status(201).json({ status: "success", data : organizerRequestDTO(request)})
+}
+
+export const myRequest = async(req, res) => {
+    const request = await getMyLatestRequest(req.user.id)
+    res.status(200).json({ status: "success", data: request ? organizerRequestDTO(request) : null })
 }
 
 export const listRequests = async(req, res) => {

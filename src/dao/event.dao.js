@@ -20,4 +20,8 @@ export class EventDAO{
     async count(filter){
         return EventModel.countDocuments(filter)
     }
+
+    async findByOrganizer(organizerId){
+        return EventModel.find({ organizer: organizerId }).sort({ date: 1 })
+    }
 }

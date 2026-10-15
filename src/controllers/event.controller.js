@@ -1,4 +1,4 @@
-import { createEvent as createEventService, getEventById, getEvents, updateEvent as updateEventService, updateEventStatus as updateEventStatusService } from "../services/event.service.js";
+import { createEvent as createEventService, getEventById, getEvents, getMyEvents, updateEvent as updateEventService, updateEventStatus as updateEventStatusService } from "../services/event.service.js";
 import { EventDTO } from "../dto/event.dto.js";
 
 export const createEvent = async(req, res) => {
@@ -10,6 +10,11 @@ export const eventList = async(req, res) => {
     const { events, page, limit, total, totalPages } = await getEvents(req.query)
     const desiredEvents = events.map(event => EventDTO(event))
     res.status(200).json({ status: "success", data: desiredEvents, page, limit, total, totalPages })
+}
+
+export const myEvents = async(req, res) => {
+    const events = await getMyEvents(req.user.id)
+    res.status(200).json({ status: "success", data: events.map(event => EventDTO(event)) })
 }
 
 export const getEvent = async(req, res) => {

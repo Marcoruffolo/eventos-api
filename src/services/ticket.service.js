@@ -34,12 +34,8 @@ export const createTicket = async (eventId, user, quantity = 1) => {
         reservationCode
     })
 
-    try{
-        await sendTicketConfirmationEmail(user.email, event, ticket)
-    }
-    catch(error){
-        console.error("No se pudo enviar el email de confirmación:", error.message)
-    }
+    sendTicketConfirmationEmail(user.email, event, ticket)
+    .catch((error) => console.error("No se pudo enviar el email de confirmación:", error.message))
 
     return ticket
 }

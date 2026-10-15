@@ -22,4 +22,8 @@ export class EventRepository{
     async count(filter){
         return this.dao.count(filter)
     }
+
+    async findByOrganizer(organizerId){
+        return this.dao.findByOrganizer(organizerId)
+    }
 }

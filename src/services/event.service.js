@@ -21,15 +21,11 @@ export const createEvent = async(eventData, organizerId) => {
     return event
 }
 
+const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+
 export const getEvents = async(query) => {
-    let page = 1
-    if(query.page){
-        page = Number(query.page)
-    }
-    let limit = 10
-    if(query.limit){
-        limit = Number(query.limit)
-    }
+    const page = Math.max(1, Math.floor(Number(query.page)) || 1)
+    const limit = Math.min(50, Math.max(1, Math.floor(Number(query.limit)) || 10))
 
     let skip = (page - 1) * limit 
     const filter = {}
@@ -43,7 +39,7 @@ export const getEvents = async(query) => {
         filter.status = "published"
     }
     if(query.location){
-        filter.location = query.location
+        filter.location = { $regex: escapeRegex(String(query.location)), $options: "i" }
     }
 
     if(query.dateFrom || query.dateTo){
@@ -53,7 +49,11 @@ export const getEvents = async(query) => {
             filter.date.$gte = new Date(query.dateFrom)
         }
         if(query.dateTo){
-            filter.date.$lte = new Date(query.dateTo)
+            const dateTo = new Date(query.dateTo)
+            if(query.dateTo.length === 10){
+                dateTo.setUTCHours(23, 59, 59, 999)
+            }
+            filter.date.$lte = dateTo
         }
     }
 
@@ -70,6 +70,10 @@ export const getEvents = async(query) => {
     const totalPages = Math.ceil(total / limit)
 
     return { events, page, limit, total, totalPages }
+}
+
+export const getMyEvents = async (organizerId) => {
+    return eventRepository.findByOrganizer(organizerId)
 }
 
 export const getEventById = async (id) => {
