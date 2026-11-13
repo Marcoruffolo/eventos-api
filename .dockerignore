@@ -1,0 +1,9 @@
+.env
+tests
+node_modules
+jest.config.js
+README.md
+Dockerfile
+.dockerignore
+.git
+.gitignore
